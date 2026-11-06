@@ -1,4 +1,5 @@
 import type { AppLanguage, ApplicationConfig, BaseProfile, Profile } from '../types';
+import { storage } from './storage';
 import { getProfile } from '../data/profiles';
 import { applications } from '../data/applications';
 import { getLocalApplications } from './localApplications';
@@ -9,7 +10,7 @@ const LANGUAGE_LABELS: Record<AppLanguage, string> = { en: 'English', de: 'Deuts
 
 function readList(): BaseProfile[] | null {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = storage.getItem(KEY);
     return raw ? (JSON.parse(raw) as BaseProfile[]) : null;
   } catch {
     return null;
@@ -17,7 +18,7 @@ function readList(): BaseProfile[] | null {
 }
 
 function writeList(list: BaseProfile[]): void {
-  localStorage.setItem(KEY, JSON.stringify(list));
+  storage.setItem(KEY, JSON.stringify(list));
 }
 
 // First-run migration: fold the previous single-profile-per-language setup

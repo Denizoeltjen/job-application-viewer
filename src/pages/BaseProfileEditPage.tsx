@@ -199,8 +199,8 @@ function BaseProfileEditContent({ stored }: { stored: BaseProfile }) {
 
         <div className="flex items-center gap-2.5 shrink-0">
           <button
-            className={`[font-family:var(--font-mono)] text-[11px] border-none rounded px-4 py-[5px] cursor-pointer transition-colors duration-150 ${
-              saved ? 'bg-[color:var(--status-offer)] text-white pointer-events-none' : 'bg-[color:var(--accent)] text-[color:var(--ink)] hover:opacity-90'
+            className={`[font-family:var(--font-mono)] text-[11px] font-semibold border-none rounded px-4 py-[5px] cursor-pointer transition-colors duration-150 ${
+              saved ? 'bg-[color:var(--status-offer)] text-[color:var(--ink)] pointer-events-none' : 'bg-[color:var(--accent)] text-[color:var(--ink)] hover:opacity-90'
             }`}
             onClick={handleSave}
           >{saved ? 'Saved!' : 'Save'}</button>

@@ -1,0 +1,38 @@
+# Portainer stack: Stacks → Add stack → Repository (this file), or paste it.
+# After the first deploy, create a user from the container's console:
+#   node server/cli.ts add <username>
+#
+# No port is published: the app joins an existing Docker network that your
+# reverse proxy / tunnel container is in, and is reachable there as
+#   http://job-applications:3000
+#
+# Before the first deploy, create the data volume once on the host. It is
+# external so that `docker compose down -v` or removing the stack never
+# deletes the database:
+#   docker volume create job-applications-data
+#
+# Stack environment variables (set them in Portainer, not here):
+#   PROXY_NETWORK  required, name of that existing Docker network
+#   DATA_VOLUME    optional, defaults to job-applications-data
+services:
+  app:
+    image: ghcr.io/seanmaier/job-application-viewer:latest
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    volumes:
+      - app-data:/data
+    networks:
+      proxy:
+        aliases:
+          - job-applications
+
+volumes:
+  app-data:
+    external: true
+    name: ${DATA_VOLUME:-job-applications-data}
+
+networks:
+  proxy:
+    external: true
+    name: ${PROXY_NETWORK:?Set PROXY_NETWORK to the Docker network of your reverse proxy}

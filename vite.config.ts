@@ -11,4 +11,9 @@ export default defineConfig({
       '@private': path.resolve(__dirname, 'private'),
     },
   },
+  server: {
+    // `npm run dev:server` serves the API; Vite forwards to it so the session
+    // cookie stays same-origin in dev just like in the single production container.
+    proxy: { '/api': 'http://localhost:3000' },
+  },
 })

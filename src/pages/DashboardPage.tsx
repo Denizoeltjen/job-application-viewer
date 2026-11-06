@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { storage } from '../utils/storage';
+import { logoutAndReload } from '../utils/api';
 import { Link } from 'react-router-dom';
 import { applications as staticApps } from '../data/applications';
 import { getLocalApplications, deleteLocalApplication } from '../utils/localApplications';
@@ -12,11 +14,11 @@ import { BackupModal } from '../components/BackupModal';
 import type { ApplicationConfig, ApplicationStatus } from '../types';
 
 function readStatus(id: string, fallback: ApplicationStatus): ApplicationStatus {
-  return (localStorage.getItem(`status-${id}`) as ApplicationStatus | null) ?? fallback;
+  return (storage.getItem(`status-${id}`) as ApplicationStatus | null) ?? fallback;
 }
 
 function writeStatus(id: string, status: ApplicationStatus) {
-  localStorage.setItem(`status-${id}`, status);
+  storage.setItem(`status-${id}`, status);
 }
 
 type SortField = 'company' | 'role' | 'status' | 'appliedDate' | 'interviewDate' | 'finalDecisionDate';
@@ -182,6 +184,12 @@ export function DashboardPage() {
           >
             + new
           </Link>
+          <button
+            className="[font-family:var(--font-mono)] text-[11px] text-[color:var(--ink-3)] bg-transparent border border-[color:var(--rule)] px-3 py-1.5 cursor-pointer hover:text-[color:var(--ink-2)] hover:border-[color:var(--ink-2)] transition-colors duration-150"
+            onClick={() => void logoutAndReload()}
+          >
+            log out
+          </button>
         </div>
       </header>
 

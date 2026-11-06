@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { exportAllData, downloadBackup, parseBackup, applyBackup } from '../utils/dataBackup';
+import { flush } from '../utils/storage';
 import type { DataBackup } from '../utils/dataBackup';
 
 interface Props {
@@ -46,14 +47,19 @@ export function BackupModal({ onClose }: Props) {
     if (!pendingBackup) return;
     const appCount = pendingBackup.localApps.length;
     const overrideCount = Object.keys(pendingBackup.configOverrides).length;
+    const profileCount = pendingBackup.baseProfiles?.length;
+    const profileSummary = profileCount === undefined
+      ? 'your current base profiles are kept, since this backup predates them'
+      : `${profileCount} base profile${profileCount === 1 ? '' : 's'}`;
     const confirmed = confirm(
-      `This replaces ALL applications, statuses, dates, notes, and profile customizations currently stored in this browser ` +
-      `with the backup (${appCount} local application${appCount === 1 ? '' : 's'}, ${overrideCount} saved edit${overrideCount === 1 ? '' : 's'}). ` +
+      `This replaces ALL applications, statuses, dates, notes, base profiles, and profile customizations currently stored in your account ` +
+      `with the backup (${appCount} local application${appCount === 1 ? '' : 's'}, ${overrideCount} saved edit${overrideCount === 1 ? '' : 's'}, ${profileSummary}). ` +
       `This cannot be undone. Continue?`,
     );
     if (!confirmed) return;
     applyBackup(pendingBackup);
-    window.location.reload();
+    // Reload only once the server has the restored data, or it would come back stale.
+    flush().then(() => window.location.reload(), (e) => alert(`Restoring failed: ${e instanceof Error ? e.message : e}`));
   };
 
   return (
@@ -80,10 +86,10 @@ export function BackupModal({ onClose }: Props) {
               Export
             </span>
             <p className="text-[12.5px] text-[color:var(--ink-2)] leading-[1.5] m-0">
-              Downloads every application, its status/dates/notes, and any profile customizations stored in this browser as one JSON file — for moving to another browser or as a backup.
+              Downloads every application, its status/dates/notes, your base profiles, and any profile customizations stored in your account as one JSON file — for moving data between accounts or as a backup.
             </p>
             <button
-              className="self-start [font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-white border-none rounded px-4 py-1.5 cursor-pointer transition-colors duration-150 hover:bg-[#1d4ed8]"
+              className="self-start [font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-[color:var(--ink)] font-semibold border-none rounded px-4 py-1.5 cursor-pointer transition-[filter] duration-150 hover:brightness-110"
               onClick={handleExport}
             >
               Download backup (.json)
@@ -97,13 +103,13 @@ export function BackupModal({ onClose }: Props) {
               Import
             </span>
             <p className="text-[12.5px] text-[color:var(--ink-2)] leading-[1.5] m-0">
-              Restores from a backup file exported above. This replaces everything currently stored in this browser.
+              Restores from a backup file exported above. This replaces everything currently stored in your account.
             </p>
             <input
               ref={fileInputRef}
               type="file"
               accept="application/json"
-              className="self-start [font-family:var(--font-mono)] text-[11px] text-[color:var(--ink-2)] cursor-pointer file:cursor-pointer file:[font-family:var(--font-mono)] file:text-[11px] file:bg-[color:var(--accent)] file:text-white file:border-none file:rounded file:px-4 file:py-1.5 file:mr-3 file:transition-colors file:duration-150 hover:file:bg-[#1d4ed8]"
+              className="self-start [font-family:var(--font-mono)] text-[11px] text-[color:var(--ink-2)] cursor-pointer file:cursor-pointer file:[font-family:var(--font-mono)] file:text-[11px] file:bg-[color:var(--accent)] file:text-[color:var(--ink)] file:font-semibold file:border-none file:rounded file:px-4 file:py-1.5 file:mr-3 file:transition-[filter] file:duration-150 hover:file:brightness-110"
               onChange={handleFileChange}
             />
             {fileName && pendingBackup && !error && (
@@ -116,7 +122,7 @@ export function BackupModal({ onClose }: Props) {
               <span className="[font-family:var(--font-mono)] text-[11px] text-[color:var(--status-rejected)]">{error}</span>
             )}
             <button
-              className="self-start [font-family:var(--font-mono)] text-[11px] bg-transparent text-[color:var(--accent)] border border-[color:var(--accent)] rounded px-4 py-1.5 cursor-pointer transition-colors duration-150 hover:bg-[color:var(--accent)] hover:text-white disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[color:var(--accent)]"
+              className="self-start [font-family:var(--font-mono)] text-[11px] bg-transparent text-[color:var(--accent)] border border-[color:var(--accent)] rounded px-4 py-1.5 cursor-pointer transition-colors duration-150 hover:bg-[color:var(--accent)] hover:text-[color:var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[color:var(--accent)]"
               disabled={!pendingBackup}
               onClick={handleRestore}
             >

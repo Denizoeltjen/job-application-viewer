@@ -29,3 +29,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local SQLite database from `npm run dev:server`
+/data
+.env

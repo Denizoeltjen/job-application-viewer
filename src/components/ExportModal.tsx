@@ -33,8 +33,8 @@ export function ExportModal({ text, onClose }: Props) {
             <button
               className={
                 copied
-                  ? '[font-family:var(--font-mono)] text-[11px] bg-[#059669] text-white border-none rounded px-3.5 py-1.5 cursor-pointer tracking-[0.02em] hover:bg-[#059669]'
-                  : '[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-white border-none rounded px-3.5 py-1.5 cursor-pointer transition-colors duration-150 tracking-[0.02em] hover:bg-[#1d4ed8]'
+                  ? '[font-family:var(--font-mono)] text-[11px] bg-[#059669] text-[color:var(--ink)] font-semibold border-none rounded px-3.5 py-1.5 cursor-pointer tracking-[0.02em] hover:bg-[#059669]'
+                  : '[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-[color:var(--ink)] font-semibold border-none rounded px-3.5 py-1.5 cursor-pointer transition-[filter] duration-150 tracking-[0.02em] hover:brightness-110'
               }
               onClick={handleCopy}
             >
