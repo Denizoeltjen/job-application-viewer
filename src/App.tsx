@@ -9,6 +9,7 @@ import { BaseProfileEditPage } from './pages/BaseProfileEditPage';
 import { LoginPage } from './pages/LoginPage';
 import { fetchCurrentUser, fetchUserData } from './utils/api';
 import { hasPendingWrites, hydrate, onSyncStatus } from './utils/storage';
+import { migrateProjectIds } from './utils/projectIdMigration';
 
 const router = createBrowserRouter([
   { path: '/', element: <DashboardPage /> },
@@ -32,6 +33,7 @@ export function App() {
   const loadData = async () => {
     try {
       hydrate(await fetchUserData());
+      migrateProjectIds();
       setAuth({ kind: 'ready' });
     } catch (e) {
       setAuth({ kind: 'error', message: e instanceof Error ? e.message : 'Loading data failed.' });

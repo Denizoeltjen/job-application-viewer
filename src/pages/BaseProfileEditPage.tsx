@@ -5,8 +5,9 @@ import type {
   Experience, Project, HumanLanguage,
 } from '../types';
 import {
-  getBaseProfile, saveBaseProfile, deleteBaseProfile, applicationsUsingBaseProfile, uniqueProjectId,
+  getBaseProfile, saveBaseProfile, deleteBaseProfile, applicationsUsingBaseProfile,
 } from '../utils/baseProfiles';
+import { conflictingProjectIds, newProjectId } from '../utils/projectIds';
 import { CVDocument } from '../components/cv/CVDocument';
 import { AutoTextarea } from '../components/AutoTextarea';
 import { UnsavedChangesDialog } from '../components/UnsavedChangesDialog';
@@ -89,6 +90,7 @@ function BaseProfileEditContent({ stored }: { stored: BaseProfile }) {
   const [copied, setCopied] = useState(false);
   const [imported, setImported] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  const projectIdConflicts = conflictingProjectIds(profile.projects);
 
   // ── updaters ──────────────────────────────────────────────────────────────
 
@@ -120,7 +122,9 @@ function BaseProfileEditContent({ stored }: { stored: BaseProfile }) {
   // ── actions ───────────────────────────────────────────────────────────────
 
   const handleSave = () => {
-    saveBaseProfile({ id: stored.id, name: name.trim() || stored.name, language: stored.language, profile });
+    const saved = saveBaseProfile({ id: stored.id, name: name.trim() || stored.name, language: stored.language, profile });
+    // Show any project ids the save had to repair instead of the stale ones.
+    setProfile(saved.profile);
     setIsDirty(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -343,6 +347,11 @@ function BaseProfileEditContent({ stored }: { stored: BaseProfile }) {
                   <div className={nafSection}>
                     <span className={nafLabel}>ID <span className={nafOptional}>(url slug)</span></span>
                     <input className={nafInput} value={proj.id} onChange={(e) => setProj(pi, { id: e.target.value })} />
+                    {projectIdConflicts.has(proj.id) && (
+                      <span className="[font-family:var(--font-mono)] text-[10.5px] text-[color:var(--status-sent)]">
+                        {proj.id ? 'Another project uses this ID.' : 'Needs an ID.'} It will be replaced when you save.
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className={nafSection}>
@@ -371,10 +380,7 @@ function BaseProfileEditContent({ stored }: { stored: BaseProfile }) {
             ))}
             <button
               className={nafAddBtn}
-              onClick={() => {
-                const id = uniqueProjectId('', profile.projects.map((p) => p.id));
-                set({ projects: [...profile.projects, { id, name: '', stack: '', description: '' }] });
-              }}
+              onClick={() => set({ projects: [...profile.projects, { id: newProjectId(profile.projects), name: '', stack: '', description: '' }] })}
             >
               + Add project
             </button>
