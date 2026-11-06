@@ -1,10 +1,11 @@
 import type { ApplicationConfig } from '../types';
+import { storage } from './storage';
 
 const KEY = 'local-apps';
 
 export function getLocalApplications(): ApplicationConfig[] {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = storage.getItem(KEY);
     return raw ? (JSON.parse(raw) as ApplicationConfig[]) : [];
   } catch {
     return [];
@@ -13,12 +14,12 @@ export function getLocalApplications(): ApplicationConfig[] {
 
 export function saveLocalApplication(app: ApplicationConfig): void {
   const rest = getLocalApplications().filter((a) => a.id !== app.id);
-  localStorage.setItem(KEY, JSON.stringify([...rest, app]));
+  storage.setItem(KEY, JSON.stringify([...rest, app]));
 }
 
 export function deleteLocalApplication(id: string): void {
   const rest = getLocalApplications().filter((a) => a.id !== id);
-  localStorage.setItem(KEY, JSON.stringify(rest));
+  storage.setItem(KEY, JSON.stringify(rest));
 }
 
 export function isLocalApplication(id: string): boolean {

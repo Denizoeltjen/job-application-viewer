@@ -28,13 +28,13 @@ export function UnsavedChangesDialog({ onSave, onDiscard, onCancel }: Props) {
             Cancel
           </button>
           <button
-            className="[font-family:var(--font-mono)] text-[11px] bg-transparent text-[color:var(--status-rejected)] border border-[color:var(--status-rejected)] rounded px-3.5 py-[6px] cursor-pointer hover:bg-[color:var(--status-rejected)] hover:text-white"
+            className="[font-family:var(--font-mono)] text-[11px] bg-transparent text-[color:var(--status-rejected)] border border-[color:var(--status-rejected)] rounded px-3.5 py-[6px] cursor-pointer hover:bg-[color:var(--status-rejected)] hover:text-[color:var(--ink)]"
             onClick={onDiscard}
           >
             Leave without saving
           </button>
           <button
-            className="[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-white border-none rounded px-4 py-[6px] cursor-pointer hover:bg-[#1d4ed8]"
+            className="[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-[color:var(--ink)] font-semibold border-none rounded px-4 py-[6px] cursor-pointer hover:brightness-110"
             onClick={onSave}
           >
             Save & leave

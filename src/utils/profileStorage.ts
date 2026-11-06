@@ -1,10 +1,11 @@
 import type { AppLanguage, Profile } from '../types';
+import { storage } from './storage';
 
 const key = (lang: AppLanguage) => `profile-override-${lang}`;
 
 export function getProfileOverride(lang: AppLanguage): Profile | null {
   try {
-    const raw = localStorage.getItem(key(lang));
+    const raw = storage.getItem(key(lang));
     return raw ? (JSON.parse(raw) as Profile) : null;
   } catch {
     return null;
@@ -12,13 +13,13 @@ export function getProfileOverride(lang: AppLanguage): Profile | null {
 }
 
 export function setProfileOverride(lang: AppLanguage, profile: Profile): void {
-  localStorage.setItem(key(lang), JSON.stringify(profile));
+  storage.setItem(key(lang), JSON.stringify(profile));
 }
 
 export function clearProfileOverride(lang: AppLanguage): void {
-  localStorage.removeItem(key(lang));
+  storage.removeItem(key(lang));
 }
 
 export function hasProfileOverride(lang: AppLanguage): boolean {
-  return localStorage.getItem(key(lang)) !== null;
+  return storage.getItem(key(lang)) !== null;
 }

@@ -1,0 +1,14 @@
+node_modules
+dist
+data
+.git
+.github
+.idea
+.claude
+.env
+
+# Personal data must never end up in an image pushed to a registry — only the
+# committed example templates are needed for the build.
+private/**/*.json
+!private/applications/example.json
+!private/profiles/*.example.json

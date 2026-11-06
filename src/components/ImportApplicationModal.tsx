@@ -97,7 +97,7 @@ export function ImportApplicationModal({ onClose }: Props) {
                   Back to edit
                 </button>
                 <button
-                  className="[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-white border-none rounded px-4 py-1.5 cursor-pointer transition-colors duration-150 hover:bg-[#1d4ed8]"
+                  className="[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-[color:var(--ink)] font-semibold border-none rounded px-4 py-1.5 cursor-pointer transition-[filter] duration-150 hover:brightness-110"
                   onClick={handleImport}
                 >
                   Create application
@@ -110,7 +110,7 @@ export function ImportApplicationModal({ onClose }: Props) {
                   onLoad={(fileText) => { setText(fileText); setErrors([]); }}
                 />
                 <button
-                  className="[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-white border-none rounded px-4 py-1.5 cursor-pointer transition-colors duration-150 hover:bg-[#1d4ed8]"
+                  className="[font-family:var(--font-mono)] text-[11px] bg-[color:var(--accent)] text-[color:var(--ink)] font-semibold border-none rounded px-4 py-1.5 cursor-pointer transition-[filter] duration-150 hover:brightness-110"
                   onClick={handlePreview}
                 >
                   Preview

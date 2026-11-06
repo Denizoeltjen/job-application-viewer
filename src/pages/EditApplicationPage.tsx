@@ -503,7 +503,7 @@ function EditContent({ staticApp, onReload }: { staticApp: ApplicationConfig; on
           <p className={napHint}>
             {rightView === 'json'
               ? <>Starts from the form, unsaved edits included. <code>Apply JSON</code> saves it and reloads the form.</>
-              : <>Changes are saved to your browser as you edit. Switch to <code>JSON</code> to edit or copy the config for <code>private/applications/{toId(company)}.json</code>.</>}
+              : <>Changes are saved to your account as you edit. Switch to <code>JSON</code> to edit or copy the config for <code>private/applications/{toId(company)}.json</code>.</>}
           </p>
         </div>
       </div>
